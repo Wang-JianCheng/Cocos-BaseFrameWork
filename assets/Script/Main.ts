@@ -7,7 +7,7 @@ export default class Helloworld extends cc.Component {
     label: cc.Label = null;
 
     @property
-    text: string = 'hello';
+    text: string = 'hello 王建程 是的撒';
 
     start () {
         // init logic
