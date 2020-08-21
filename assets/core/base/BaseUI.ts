@@ -1,10 +1,50 @@
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class BaseView extends cc.Component {
+export default class BaseUI extends cc.Component {
 
     public state: string = 'none'
     private __listens: any[] = []// 监听列表
+    constructor() {
+        super();
+    }
+    public BindUI(): void {
+        console.error("BindUI BindUI BindUI")
+    }
+    public __register(val?: string) {
+        console.error("__register__register__register")
+    }
+    public __unRegister(val?: string) {
+        console.error("__register__register__register")
+    }
+    onLoad() {
+        console.log("BaseUI BaseUI BaseUI BaseUI BaseUI")
+    }
+    onEnable() {
+
+    }
+    onDisable() {
+
+    }
+    onDestroy() {
+
+    }
+    // 添加点击事件
+    public addClickEvent(path: string, cmptType: typeof cc.Component, handler: string, data?: string) {
+        const cmpt = this.node.FindChild(path, cmptType)
+        if (!cmpt) {
+            return log.error(this.node.name + '.addClickEvent error! [' + path + '] not find!')
+        }
+        if (!this[handler] || typeof (this[handler]) !== 'function') {
+            return log.error(handler + ' 没有找到对应的方法名 at=' + this['__classname__'])
+        }
+        const events = cmpt instanceof cc.ToggleContainer ? cmpt.checkEvents : cmpt['clickEvents']
+        if (events) {
+            events[0] = this.__newEventHandler(handler, data)
+        } else {
+            return log.error(handler + ' 没有对应的events at=' + this['__classname__'] + '/' + path)
+        }
+    }
 
     // public __register(val?: string) {
     //     this.__listens.forEach(({ type, cb, target, tag }) => (!val || val === tag) && eventCenter.on(type, cb, target))

@@ -4,7 +4,9 @@
       true
     ]
   ],
-  "excluded-modules": [],
+  "excluded-modules": [
+    "SafeArea"
+  ],
   "group-list": [
     "default"
   ],
@@ -32,5 +34,7 @@
       "enable": false
     }
   },
-  "migrate-history": []
+  "migrate-history": [
+    "cloud-function"
+  ]
 }
