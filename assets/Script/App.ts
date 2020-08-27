@@ -12,9 +12,9 @@ export default class App extends BaseUI {
     text: string = 'hello 王建程';
 
     public aaa: number = 0;
-
+    private event: any = null;
     start() {
-        
+
         // this.label.string = this.text;
         // console.error("sssss", this.node, this['__classname__'])
 
@@ -39,8 +39,26 @@ export default class App extends BaseUI {
         //     }
         //     // }).call(() => { temp.destroy() }).start();
         // }).start();
+
+        this.event = new cc.EventTarget();
+        this.event.on("change", this.func1, this);
+        this.event.on("tips", this.func2, this);
+        console.error("event", this.event);
+
+        let data: Map<string, number> = new Map();//Map数据结构
+        data.set("id",1)
+        data.set("reward",100)
+        console.error("data",data.size,data.get("id"),data.get("ids"),data.has("id"),data.has("name"))
+        // data.delete("id")
+        // data.clear()
+        
     }
+    private func1(...param): void {
+        console.error("func1", ...param)
+    }
+    private func2(): void { }
     private onClickLogin(event: cc.Event.EventTouch, data: string): void {
-        console.log("aaaaa", event, data)
+        // console.log("aaaaa", event, data)
+        this.event.emit("change", 1)
     }
 }
