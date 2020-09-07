@@ -1,5 +1,6 @@
-import ComFunc from "./ComFunc";
-import PlatformAPI from "./PlatformAPI";
+
+import PlatformAPI from "../base/PlatformAPI";
+import ComFunc from "../base/ComFunc";
 
 const { ccclass, property } = cc._decorator;
 

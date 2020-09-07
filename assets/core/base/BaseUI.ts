@@ -17,6 +17,9 @@ export default class BaseUI extends cc.Component {
     public __unRegister(val?: string) {
         console.error("__register__register__register")
     }
+    public init(): void {
+
+    }
     onLoad() {
         console.log("BaseUI BaseUI BaseUI BaseUI BaseUI")
     }
@@ -31,19 +34,19 @@ export default class BaseUI extends cc.Component {
     }
     // 添加点击事件
     public addClickEvent(path: string, cmptType: typeof cc.Component, handler: string, data?: string) {
-        const cmpt = this.node.FindChild(path, cmptType)
-        if (!cmpt) {
-            return log.error(this.node.name + '.addClickEvent error! [' + path + '] not find!')
-        }
-        if (!this[handler] || typeof (this[handler]) !== 'function') {
-            return log.error(handler + ' 没有找到对应的方法名 at=' + this['__classname__'])
-        }
-        const events = cmpt instanceof cc.ToggleContainer ? cmpt.checkEvents : cmpt['clickEvents']
-        if (events) {
-            events[0] = this.__newEventHandler(handler, data)
-        } else {
-            return log.error(handler + ' 没有对应的events at=' + this['__classname__'] + '/' + path)
-        }
+        // const cmpt = this.node.FindChild(path, cmptType)
+        // if (!cmpt) {
+        //     return cc.error(this.node.name + '.addClickEvent error! [' + path + '] not find!')
+        // }
+        // if (!this[handler] || typeof (this[handler]) !== 'function') {
+        //     return cc.error(handler + ' 没有找到对应的方法名 at=' + this['__classname__'])
+        // }
+        // const events = cmpt instanceof cc.ToggleContainer ? cmpt.checkEvents : cmpt['clickEvents']
+        // if (events) {
+        //     events[0] = this.__newEventHandler(handler, data)
+        // } else {
+        //     return cc.error(handler + ' 没有对应的events at=' + this['__classname__'] + '/' + path)
+        // }
     }
 
     // public __register(val?: string) {

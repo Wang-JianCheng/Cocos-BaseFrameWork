@@ -19,10 +19,13 @@ export default class EventManager extends cc.Component {
     constructor() {
         super();
         this.event = new cc.EventTarget();
-        // this.keyList = [];
     }
     public on(key: string, handle, target): void {
         this.event.on(key, handle, target);
+        // console.error("event on", this.event)
+    }
+    public onOnce(key: string, handle, target): void {
+        this.event.once(key, handle, target);
         // console.error("event on", this.event)
     }
     // public emit(key: string, arg0, arg1, arg2, arg3, arg4): void {
