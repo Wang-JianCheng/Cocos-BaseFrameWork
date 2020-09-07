@@ -13,7 +13,6 @@ export default class App extends BaseUI {
 
     public aaa: number = 0;
     private event: any = null;
-    public ec: any = null;
     start() {
 
         // this.label.string = this.text;
@@ -42,19 +41,18 @@ export default class App extends BaseUI {
         // }).start();
 
         this.event = new cc.EventTarget();
-        // this.event.on("change", this.func1, this);
-
+        this.event.on("change", this.func1, this);
         this.event.on("tips", this.func2, this);
-        this.ec = this.event.on("changeaaa", this.func1, this);
-        console.error("event",this.ec , this.event);
+        
+        console.error("event", this.event,this.event.hasEventListener("change"),this.event.hasEventListener("change"));
 
         let data: Map<string, number> = new Map();//Map数据结构
-        data.set("id", 1)
-        data.set("reward", 100)
-        console.error("data", data.size, data.get("id"), data.get("ids"), data.has("id"), data.has("name"))
+        data.set("id",1)
+        data.set("reward",100)
+        console.error("data",data.size,data.get("id"),data.get("ids"),data.has("id"),data.has("name"))
         // data.delete("id")
         // data.clear()
-
+        
     }
     private func1(...param): void {
         console.error("func1", ...param)
@@ -62,8 +60,6 @@ export default class App extends BaseUI {
     private func2(): void { }
     private onClickLogin(event: cc.Event.EventTouch, data: string): void {
         // console.log("aaaaa", event, data)
-        // this.event.emit("changeaaa", 1)
-        this.event.off(this.ec);
-        console.error("event", this.event)
+        this.event.emit("change", 1)
     }
 }

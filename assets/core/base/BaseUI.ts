@@ -21,7 +21,7 @@ export default class BaseUI extends cc.Component {
 
     }
     onLoad() {
-        console.log("BaseUI BaseUI BaseUI BaseUI BaseUI")
+        // console.log("BaseUI BaseUI BaseUI BaseUI BaseUI")
     }
     onEnable() {
 
