@@ -1,26 +1,25 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+import BaseUI from "../base/BaseUI";
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class UIManager extends cc.Component {
+    // 当前实例 
+    private static _instance: UIManager;
+    /**单例模式，用存取器get获取当前实例*/
+    public static get Instance(): UIManager {
+        if (!this._instance) {
+            this._instance = new UIManager();
+        }
+        return this._instance;
+    }
 
-    @property(cc.Label)
-    label: cc.Label = null;
-
-    @property
-    text: string = 'hello';
-
+    private UIList: BaseUI[] = [];
     // LIFE-CYCLE CALLBACKS:
 
     // onLoad () {}
 
-    start () {
+    start() {
 
     }
 
