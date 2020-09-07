@@ -1,4 +1,4 @@
-import PlatformAPI from "../base/PlatformAPI";
+// import PlatformAPI from "../base/PlatformAPI";
 
 
 const { ccclass, property } = cc._decorator;
