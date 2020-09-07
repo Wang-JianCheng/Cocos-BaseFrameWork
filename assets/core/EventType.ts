@@ -1,0 +1,20 @@
+/**
+ * 全局事件
+ */
+export const EventType = {
+    CHANGE_LOGIN_MAIN: 'CHANGE_LOGIN_MAIN',// 切换到登录界面
+
+    UPDATE_GOLD: 'UPDATE_GOLD',// 刷新金币
+    UPDATE_DUCKLV: 'UPDATE_DUCKLV',// 刷新金币
+    UPDATE_STAMINA: 'UPDATE_STAMINA',// 刷新体力
+    UPDATE_GRADE: 'UPDATE_GRADE',// 刷新年纪
+    UPDATE_LIVENESS: 'UPDATE_LIVENESS',// 刷新活力
+   
+
+    PLAY_TRUN_AWARD: 'PLAY_TRUN_AWARD',// 播放轮盘奖励
+    PLAY_LIVENESS_AWARD: 'PLAY_LIVENESS_AWARD',// 播放活力奖励
+
+
+    MINIGAME_START_GAME: 'MINIGAME_START_GAME', // 启动小游戏
+    MINIGAME_RESTART: 'MINIGAME_RESTART', // 小游戏再来一局
+}

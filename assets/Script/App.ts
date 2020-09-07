@@ -1,4 +1,6 @@
 import BaseUI from "../core/base/BaseUI";
+import EventManager from "../core/manager/EventManager";
+import { EventType } from "../core/EventType";
 
 const { ccclass, property } = cc._decorator;
 
@@ -13,7 +15,23 @@ export default class App extends BaseUI {
 
     public aaa: number = 0;
     private event: any = null;
+
+    public listenEventMaps() {
+        return [
+            { "gameChange": this.onStartDuckRunGame },
+            { [EventType.UPDATE_GOLD] : this.onDuckrunRegame },
+            { "change": this.func1 },
+        ]
+    }
+    private onStartDuckRunGame() {
+        console.log("aaaaaaaaaa",EventType.UPDATE_GOLD)
+    }
+    private onDuckrunRegame() {
+        console.log("bbbbbbbb")
+    }
     start() {
+        this.__listenMaps();
+        this.__register();
 
         // this.label.string = this.text;
         // console.error("sssss", this.node, this['__classname__'])
@@ -26,40 +44,45 @@ export default class App extends BaseUI {
 
         var button = this.node.getChildByName("New Button").getComponent(cc.Button);
         button.clickEvents.push(clickEventHandler);
-        this.BindUI();
-        this.__register();
+        // this.BindUI();
+        // this.__listenMaps();
+        // this.__register();
 
-        // let temp = new cc.Node();
-        // temp.x = 0;
-        // cc.tween(temp).to(1, { x: 100 }, {
-        //     progress: (start, end, current, ratio) => {
-        //         console.error("startstart", start, end, current, ratio)
+        // // let temp = new cc.Node();
+        // // temp.x = 0;
+        // // cc.tween(temp).to(1, { x: 100 }, {
+        // //     progress: (start, end, current, ratio) => {
+        // //         console.error("startstart", start, end, current, ratio)
 
-        //         return start + (end - start) * ratio;
-        //     }
-        //     // }).call(() => { temp.destroy() }).start();
-        // }).start();
+        // //         return start + (end - start) * ratio;
+        // //     }
+        // //     // }).call(() => { temp.destroy() }).start();
+        // // }).start();
 
-        this.event = new cc.EventTarget();
-        this.event.on("change", this.func1, this);
-        this.event.on("tips", this.func2, this);
-        
-        console.error("event", this.event,this.event.hasEventListener("change"),this.event.hasEventListener("change"));
+        // this.event = new cc.EventTarget();
+        // this.event.on("change", this.func1, this);
+        // this.event.on("tips", this.func2, this);
 
-        let data: Map<string, number> = new Map();//Map数据结构
-        data.set("id",1)
-        data.set("reward",100)
-        console.error("data",data.size,data.get("id"),data.get("ids"),data.has("id"),data.has("name"))
-        // data.delete("id")
-        // data.clear()
-        
+        // console.error("event", this.event, this.event.hasEventListener("change"));
+
+        // let data: Map<string, number> = new Map();//Map数据结构
+        // data.set("id", 1)
+        // data.set("reward", 100)
+        // console.error("data", data.size, data.get("id"), data.get("ids"), data.has("id"), data.has("name"))
+        // // data.delete("id")
+        // // data.clear()
+
     }
-    private func1(...param): void {
-        console.error("func1", ...param)
+    private func1(data): void {
+        console.error("func1", data);
     }
     private func2(): void { }
     private onClickLogin(event: cc.Event.EventTouch, data: string): void {
         // console.log("aaaaa", event, data)
-        this.event.emit("change", 1)
+        EventManager.Instance.emit("change", 1)
+        // this.event.removeAll("change")
+        // this.event.off("change", this.func1, this)
+        // console.error("event", this.event, this.event.hasEventListener("change"));
+        // this.__unregister();
     }
 }

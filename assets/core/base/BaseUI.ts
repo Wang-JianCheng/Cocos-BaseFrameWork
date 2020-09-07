@@ -1,3 +1,5 @@
+import EventManager from "../manager/EventManager";
+
 const { ccclass, property } = cc._decorator;
 
 @ccclass
@@ -8,14 +10,42 @@ export default class BaseUI extends cc.Component {
     constructor() {
         super();
     }
+    public listenEventMaps(): any[] {
+        return []
+    }
     public BindUI(): void {
         console.error("BindUI BindUI BindUI")
     }
     public __register(val?: string) {
-        console.error("__register__register__register")
+        this.__listens.forEach(({ type, cb, target, tag }) => EventManager.Instance.on(type, cb, target))
+        console.error("__listens", this.__listens, EventManager.Instance.event)
+        // this.__listens.forEach(({ type, cb, target, tag }) => (!val || val === tag) && EventManager.Instance.on(type, cb, target))
     }
-    public __unRegister(val?: string) {
-        console.error("__register__register__register")
+
+    public __unregister(val?: string) {
+        this.__listens.forEach(({ type, cb, target, tag }) => EventManager.Instance.off(type, cb, target))
+        // EventManager.Instance.targetOff(this);
+        // this.__listens.forEach(({ type, cb, target, tag }) => (!val || val === tag) && EventManager.Instance.off(type, cb, target))
+        console.error("__unregister", this.__listens, EventManager.Instance.event)
+    }
+    public __listenMaps() {
+        this.__wrapListenMaps(this.listenEventMaps(), this.__listens, this)
+    }
+    protected __wrapListenMaps(listens: any[], out: any[], target: any): any[] {
+        listens.forEach(map => {
+            let data = { type: '', cb: null, target: target, tag: 'create' }
+            for (let key in map) {
+                let val = map[key]
+                if (typeof (val) === 'function') {
+                    data.type = key
+                    data.cb = val
+                } else if (key === 'enter') {
+                    data.tag = key
+                }
+            }
+            out.push(data)
+        })
+        return out
     }
     public init(): void {
 
@@ -57,9 +87,7 @@ export default class BaseUI extends cc.Component {
     //     this.__listens.forEach(({ type, cb, target, tag }) => (!val || val === tag) && eventCenter.off(type, cb, target))
     // }
 
-    // public __listenMaps() {
-    //     this.__wrapListenMaps(this.listenEventMaps(), this.__listens, this)
-    // }
+
 
     // public addListener(type: string, cb: Function, target?: any) {
     //     this.__listens.push({ type: type, cb: cb, target: target })
