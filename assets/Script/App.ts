@@ -1,49 +1,45 @@
 import BaseUI from "../core/base/BaseUI";
 import EventManager from "../core/manager/EventManager";
-import { EventType } from "../core/EventType";
+import { EventType } from "../Script/common/constant/EventType";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class App extends BaseUI {
 
-    @property(cc.Label)
-    label: cc.Label = null;
 
-    @property
-    text: string = 'hello 王建程';
-
-    public aaa: number = 0;
-    private event: any = null;
-
-    public listenEventMaps() {
+    public EventList(): any[] {
         return [
-            { "gameChange": this.onStartDuckRunGame },
-            { [EventType.UPDATE_GOLD] : this.onDuckrunRegame },
-            { "change": this.func1 },
+            [EventType.UPDATE_DUCKLV, this.func2],
+            [EventType.UPDATE_GOLD, this.func2]
         ]
     }
-    private onStartDuckRunGame() {
-        console.log("aaaaaaaaaa",EventType.UPDATE_GOLD)
-    }
-    private onDuckrunRegame() {
-        console.log("bbbbbbbb")
-    }
     start() {
-        this.__listenMaps();
-        this.__register();
+
+        this.create();
+        // console.error("aaaaaaa", EventManager.Instance.event)
+
+        // this.__listenMaps();
+        // this.__register();
 
         // this.label.string = this.text;
         // console.error("sssss", this.node, this['__classname__'])
 
-        var clickEventHandler = new cc.Component.EventHandler();
-        clickEventHandler.target = this.node; // 这个 node 节点是你的事件处理代码组件所属的节点
-        clickEventHandler.component = "App";// 这个是代码文件名
-        clickEventHandler.handler = "onClickLogin";
-        clickEventHandler.customEventData = "2";
 
-        var button = this.node.getChildByName("New Button").getComponent(cc.Button);
-        button.clickEvents.push(clickEventHandler);
+
+
+        // var clickEventHandler = new cc.Component.EventHandler();
+        // clickEventHandler.target = this.node; // 这个 node 节点是你的事件处理代码组件所属的节点
+        // clickEventHandler.component = "App";// 这个是代码文件名
+        // clickEventHandler.handler = "onClickLogin";
+        // clickEventHandler.customEventData = "2";
+        // var button = this.node.getChildByName("New Button").getComponent(cc.Button);
+        // button.clickEvents.push(clickEventHandler);
+
+
+
+
+
         // this.BindUI();
         // this.__listenMaps();
         // this.__register();
@@ -79,7 +75,7 @@ export default class App extends BaseUI {
     private func2(): void { }
     private onClickLogin(event: cc.Event.EventTouch, data: string): void {
         // console.log("aaaaa", event, data)
-        EventManager.Instance.emit("change", 1)
+        // EventManager.Instance.emit("change", 1)
         // this.event.removeAll("change")
         // this.event.off("change", this.func1, this)
         // console.error("event", this.event, this.event.hasEventListener("change"));

@@ -1,63 +1,114 @@
+import { EventType } from "../../Script/common/constant/EventType";
 import EventManager from "../manager/EventManager";
 
 const { ccclass, property } = cc._decorator;
 
+const CmptType = [
+    { str: "Node_", type: cc.Node },
+    { str: "Lbl_", type: cc.Label },
+    { str: "Spr_", type: cc.Sprite },
+    { str: "Btn_", type: cc.Button },
+    { str: "Tge_", type: cc.Toggle },
+    { str: "Ani_", type: cc.Animation },
+    { str: "Sv_", type: cc.ScrollView },
+];
+
+
 @ccclass
 export default class BaseUI extends cc.Component {
 
+
+
     public state: string = 'none'
-    private __listens: any[] = []// 监听列表
+    // public eventMaps: any[] = [];
+    private listens: any[] = []// 监听列表
     constructor() {
         super();
     }
-    public listenEventMaps(): any[] {
-        return []
+    /**当前注册监听事件集合  string:监听事件名称; Function:响应函数 */
+    public EventList(): [string, Function][] {
+        return [];
     }
-    public BindUI(): void {
-        console.error("BindUI BindUI BindUI")
+    public create(): void {
+        this.BindUI();
     }
-    public __register(val?: string) {
-        this.__listens.forEach(({ type, cb, target, tag }) => EventManager.Instance.on(type, cb, target))
-        console.error("__listens", this.__listens, EventManager.Instance.event)
-        // this.__listens.forEach(({ type, cb, target, tag }) => (!val || val === tag) && EventManager.Instance.on(type, cb, target))
+    onEnable() {
+        this.addListener();
     }
+    onDisable() {
+        this.removeListener();
+    }
+    /**注册监听事件 */
+    private addListener(): void {
+        let arr = this.EventList();
+        for (let index = 0; index < arr.length; index++) {
+            const element = arr[index];
+            let data = { key: '', cb: null };
+            data.key = element[0];
+            data.cb = element[1];
+            EventManager.Instance.on(data.key, data.cb, this);
+            this.listens.push(data);
+        }
+    }
+    /**移除监听事件 */
+    private removeListener(): void {
+        this.listens.forEach(({ key, cb }) => EventManager.Instance.off(key, cb, this))
+    }
+    private BindUI(): void {
+        let nodeArr: cc.Node[] = [];
+        this.getBindNodes(this.node.children, nodeArr);
+        // this.node.children.forEach(node => {
+        // });
+        console.error("BindUI", nodeArr)
+    }
+    private getBindNodes(children: cc.Node[], nodeArr: cc.Node[]): void {
+        children.forEach(node => {
+            let arr = node.name.split('_');
+            if (arr.length >= 2 && !!arr[0]) {
 
-    public __unregister(val?: string) {
-        this.__listens.forEach(({ type, cb, target, tag }) => EventManager.Instance.off(type, cb, target))
-        // EventManager.Instance.targetOff(this);
-        // this.__listens.forEach(({ type, cb, target, tag }) => (!val || val === tag) && EventManager.Instance.off(type, cb, target))
-        console.error("__unregister", this.__listens, EventManager.Instance.event)
-    }
-    public __listenMaps() {
-        this.__wrapListenMaps(this.listenEventMaps(), this.__listens, this)
-    }
-    protected __wrapListenMaps(listens: any[], out: any[], target: any): any[] {
-        listens.forEach(map => {
-            let data = { type: '', cb: null, target: target, tag: 'create' }
-            for (let key in map) {
-                let val = map[key]
-                if (typeof (val) === 'function') {
-                    data.type = key
-                    data.cb = val
-                } else if (key === 'enter') {
-                    data.tag = key
-                }
+                nodeArr.push(node);
             }
-            out.push(data)
-        })
-        return out
+            if (node.children.length > 0) {
+                this.getBindNodes(node.children, nodeArr)
+            }
+        });
     }
+    // public __register(val?: string) {
+    //     this.__listens.forEach(({ type, cb, target, tag }) => EventManager.Instance.on(type, cb, target))
+    //     console.error("__listens", this.__listens, EventManager.Instance.event)
+    //     // this.__listens.forEach(({ type, cb, target, tag }) => (!val || val === tag) && EventManager.Instance.on(type, cb, target))
+    // }
+
+    // public __unregister(val?: string) {
+    //     this.__listens.forEach(({ type, cb, target, tag }) => EventManager.Instance.off(type, cb, target))
+    //     // EventManager.Instance.targetOff(this);
+    //     // this.__listens.forEach(({ type, cb, target, tag }) => (!val || val === tag) && EventManager.Instance.off(type, cb, target))
+    //     console.error("__unregister", this.__listens, EventManager.Instance.event)
+    // }
+    // public __listenMaps() {
+    //     this.__wrapListenMaps(this.listenEventMaps(), this.__listens, this)
+    // }
+    // protected __wrapListenMaps(listens: any[], out: any[], target: any): any[] {
+    //     listens.forEach(map => {
+    //         let data = { type: '', cb: null, target: target, tag: 'create' }
+    //         for (let key in map) {
+    //             let val = map[key]
+    //             if (typeof (val) === 'function') {
+    //                 data.type = key
+    //                 data.cb = val
+    //             } else if (key === 'enter') {
+    //                 data.tag = key
+    //             }
+    //         }
+    //         out.push(data)
+    //     })
+    //     return out
+    // }
     public init(): void {
 
     }
     onLoad() {
         // console.log("BaseUI BaseUI BaseUI BaseUI BaseUI")
-    }
-    onEnable() {
-
-    }
-    onDisable() {
-
     }
     onDestroy() {
 

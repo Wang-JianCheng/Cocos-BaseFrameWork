@@ -27,6 +27,7 @@ export default class PoolManager extends cc.Component {
     prefabArr: Pool[] = [];
     // LIFE-CYCLE CALLBACKS:
     private allPoolArr: cc.NodePool[] = [];
+    private poolArr: Map<string, cc.NodePool[]> = new Map();
     onLoad() {
         PoolManager.instance = this;
 

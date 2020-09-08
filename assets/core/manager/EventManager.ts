@@ -59,7 +59,7 @@ export default class EventManager extends cc.Component {
         // console.error("event off", this.event)
     }
     /**
-     * 删除 target 参数在当前 EventTarget 上注册的所有事件监听器。
+     * 删除target参数在当前 EventTarget 上注册的所有事件监听器。
      * @param target 
      */
     public targetOff(target: any): void {
