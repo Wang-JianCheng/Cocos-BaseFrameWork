@@ -51,13 +51,16 @@ export default class AssetsManager extends cc.Component {
             cc.resources.load(url, type, onProgess, (err, asset) => {
                 if (err) {
                     cc.error(`load ${url} error`, err);
-                    resolve([]);
+                    resolve(null);
                 } else {
                     resolve(asset);
                 }
                 // console.log("onComplete", err, asset)
             });
         })
+    }
+    public loadImg(url: string, sprite: cc.Sprite): void {
+        this.load(url, cc.SpriteFrame).then(res => sprite.spriteFrame = res);
     }
     // update (dt) {}
 }

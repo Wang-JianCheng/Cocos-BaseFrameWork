@@ -97,7 +97,7 @@ export default class AudioManager extends cc.Component {
             cc.assetManager.releaseAsset(audio);
         }
     }
-
+    /**改变当前音效状态 */
     public changeStatus(): void {
         this.isBan = !this.isBan;
         if (this.isBan) {

@@ -15,6 +15,9 @@ export default class UIManager extends cc.Component {
     }
 
     private UIList: BaseUI[] = [];
+    private preUI: cc.Node = null;
+    private curUI: cc.Node = null;
+    private nextUI: cc.Node = null;
     // LIFE-CYCLE CALLBACKS:
 
     // onLoad () {}
@@ -22,6 +25,8 @@ export default class UIManager extends cc.Component {
     start() {
 
     }
-
+    public openUI(): void { }
+    public hideUI(): void { }
+    public closeUI(): void { }
     // update (dt) {}
 }

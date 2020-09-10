@@ -16,11 +16,6 @@ const CmptTypeVal = {
 
 @ccclass
 export default class BaseUI extends cc.Component {
-
-
-
-    public state: string = 'none'
-    // public eventMaps: any[] = [];
     private listens: any[] = []// 监听列表
     constructor() {
         super();
