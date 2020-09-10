@@ -1,8 +1,10 @@
 import { EventType } from "./common/config/EventType";
 import BaseUI from "./core/base/BaseUI";
+import AudioManager from "./core/manager/AudioManager";
 
 const { ccclass, property } = cc._decorator;
 
+//游戏入口
 @ccclass
 export default class App extends BaseUI {
     //@autocode property begin
@@ -11,6 +13,7 @@ export default class App extends BaseUI {
     private icon: cc.Sprite = null;
     private confBtn: cc.Button = null;
     //@end
+
 
     //事件监听
     public EventList(): any[] {
@@ -29,20 +32,21 @@ export default class App extends BaseUI {
         // // data.clear()
 
     }
-    private func1(data): void {
-        console.error("func1", data);
-    }
-    private func2(): void { }
     // ----------------------------------------- button listener function -------------------------------------------
     private onClickLogin(event: cc.Event.EventTouch, data: string): void {
         // console.log("aaaaa", event, data)
         this.text.string = "Login"
+        AudioManager.Instance.playMusic("common/audio/bgm");
     }
     private onClickConfBtn(event: cc.Event.EventTouch, data: string): void {
         // console.log("onClickconfBtn", event, data)
         this.text.string = "onClickconfBtn";
+        AudioManager.Instance.playMusic("common/audio/story");
     }
     // ----------------------------------------- event listener function --------------------------------------------
-
+    private func1(data): void {
+        console.error("func1", data);
+    }
+    private func2(): void { }
     // ----------------------------------------- custom function ----------------------------------------------------
 }
