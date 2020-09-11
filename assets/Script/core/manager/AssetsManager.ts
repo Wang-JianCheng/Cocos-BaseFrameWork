@@ -59,8 +59,19 @@ export default class AssetsManager extends cc.Component {
             });
         })
     }
-    public loadImg(url: string, sprite: cc.Sprite): void {
-        this.load(url, cc.SpriteFrame).then(res => sprite.spriteFrame = res);
+    /**动态加载resources目录下图片
+     * @param url 地址
+     * @param spriteNode sprite组件或者所在node节点 
+     */
+    public loadImg(url: string, spriteNode: cc.Sprite | cc.Node): void {
+        this.load(url, cc.SpriteFrame).then(spriteFrame => {
+            if (spriteNode instanceof cc.Sprite) {
+                spriteNode.spriteFrame = spriteFrame;
+            } else {
+                spriteNode.getComponent(cc.Sprite).spriteFrame = spriteFrame;
+            }
+        })
     }
+    public loadJson():void{}
     // update (dt) {}
 }

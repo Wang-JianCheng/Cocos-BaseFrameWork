@@ -1,5 +1,6 @@
 import { EventType } from "./common/config/EventType";
 import BaseUI from "./core/base/BaseUI";
+import AssetsManager from "./core/manager/AssetsManager";
 import AudioManager from "./core/manager/AudioManager";
 
 const { ccclass, property } = cc._decorator;
@@ -30,7 +31,7 @@ export default class App extends BaseUI {
         // console.error("data", data.size, data.get("id"), data.get("ids"), data.has("id"), data.has("name"))
         // // data.delete("id")
         // // data.clear()
-
+        AssetsManager.Instance.loadImg("textures/coin2", this.icon)
     }
     // ----------------------------------------- button listener function -------------------------------------------
     private onClickLogin(event: cc.Event.EventTouch, data: string): void {
