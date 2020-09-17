@@ -1,4 +1,4 @@
-import ComFunc from "../base/ComFunc";
+import BaseFunc from "../base/BaseFunc";
 
 const { ccclass, property } = cc._decorator;
 
@@ -25,22 +25,22 @@ export default class PlatformAPI extends cc.Component {
         // if (cc.sys.platform === cc.sys.WECHAT_GAME) {//微信、QQ、字节跳动platform一样,所以不能用平台号区别三者，否则会出错误
         //     try {
         //         if (qq) {
-        //             ComFunc.error("try QQ平台");
+        //             BaseFunc.error("try QQ平台");
         //             this.platform = qq;
         //             this.platform_name = "qq";
         //         }
         //     } catch (error) {
         //         try {
         //             if (tt) {
-        //                 ComFunc.error("catch 字节跳动平台")
+        //                 BaseFunc.error("catch 字节跳动平台")
         //                 this.platform = tt;
         //                 this.platform_name = "tt";
         //                 // this.initRecorder();
         //                 let app_name = tt.getSystemInfoSync().appName;
-        //                 // ComFunc.log("BannerManager app_name: ", app_name);
+        //                 // BaseFunc.log("BannerManager app_name: ", app_name);
         //             }
         //         } catch (error) {
-        //             ComFunc.error("catch catch 微信平台")
+        //             BaseFunc.error("catch catch 微信平台")
         //             this.platform = wx;
         //             this.platform_name = "wx";
         //         }
@@ -52,7 +52,7 @@ export default class PlatformAPI extends cc.Component {
         //     this.platform = qg;
         //     this.platform_name = "vivo";
         // } else {
-        //     ComFunc.error("浏览器")
+        //     BaseFunc.error("浏览器")
         //     this.platform = null;
         //     this.platform_name = "browser";
         // }
@@ -72,7 +72,7 @@ export default class PlatformAPI extends cc.Component {
     //         console.log('录屏结束');
     //         console.log(res.videoPath);
     //         if (!this.showTip) {
-    //             ComFunc.tips(`录屏结束`);
+    //             BaseFunc.tips(`录屏结束`);
     //         }
     //         Game.instance.hideVideo();
     //         this.isEnd = true;
@@ -97,7 +97,7 @@ export default class PlatformAPI extends cc.Component {
     // }
     // public shareVideo(): void {
     //     if (this.showTip) {
-    //         ComFunc.tips(`录屏时间不足`);
+    //         BaseFunc.tips(`录屏时间不足`);
     //         return;
     //     }
     //     if (this.recorder) {
@@ -159,10 +159,10 @@ export default class PlatformAPI extends cc.Component {
                         },
                     ],
                     success(res) {
-                        ComFunc.log("success", res.errMsg);
+                        BaseFunc.log("success", res.errMsg);
                     },
                     fail(res) {
-                        ComFunc.log("fail", res.errMsg);
+                        BaseFunc.log("fail", res.errMsg);
                     }
                 });
             } else {
@@ -177,19 +177,19 @@ export default class PlatformAPI extends cc.Component {
                 withShareTicket: true
             })
             // this.platform.onShareAppMessage(() => {
-            //     let msg = ShareConfig[ComFunc.getRandom(0, ShareConfig.length)];
+            //     let msg = ShareConfig[BaseFunc.getRandom(0, ShareConfig.length)];
             //     return {
             //         title: msg.text,
             //         imageUrl: msg.url,
             //         query: "",
             //         success(res) {
-            //             ComFunc.log("首页右上角转发 成功")
+            //             BaseFunc.log("首页右上角转发 成功")
             //         },
             //         fail(res) {
-            //             ComFunc.log("首页右上角转发 失败")
+            //             BaseFunc.log("首页右上角转发 失败")
             //         },
             //         complete: function (res) {
-            //             // ComFunc.log("首页右上角转发");
+            //             // BaseFunc.log("首页右上角转发");
             //         }
             //     }
             // })
@@ -202,7 +202,7 @@ export default class PlatformAPI extends cc.Component {
      */
     public share(successFunc?: any, failFunc?: any): void {
         if (this.platform.shareAppMessage) {
-            // let msg = ShareConfig[ComFunc.getRandom(0, ShareConfig.length)];
+            // let msg = ShareConfig[BaseFunc.getRandom(0, ShareConfig.length)];
             // this.platform.shareAppMessage({
             //     title: msg.text,    //转发标题，不传则默认使用当前小游戏的昵称。
             //     imageUrl: msg.url,  //图片链接，网络路径或本地文件路径
@@ -295,19 +295,19 @@ export default class PlatformAPI extends cc.Component {
                 showCancel: showCancel,
                 success(res) {
                     if (res.confirm) {
-                        ComFunc.log('用户点击确定');
+                        BaseFunc.log('用户点击确定');
                         if (confirmFunc) {
                             confirmFunc();
                         }
                     } else if (res.cancel) {
-                        ComFunc.log('用户点击取消');
+                        BaseFunc.log('用户点击取消');
                         if (cancelFunc) {
                             cancelFunc();
                         }
                     }
                 },
                 fail(res) {
-                    ComFunc.log(`showModal调用失败`);
+                    BaseFunc.log(`showModal调用失败`);
                 }
             })
         }

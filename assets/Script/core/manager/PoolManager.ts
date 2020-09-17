@@ -18,7 +18,16 @@ export class Pool {
 }
 @ccclass
 export default class PoolManager extends cc.Component {
-    static instance: PoolManager = null;
+    // 当前实例 
+    private static _instance: PoolManager;
+    /**单例模式，用存取器get获取当前实例*/
+    public static get Instance(): PoolManager {
+        if (!this._instance) {
+            this._instance = new PoolManager();
+        }
+        return this._instance;
+    }
+
 
     @property({
         type: [Pool],
@@ -28,8 +37,10 @@ export default class PoolManager extends cc.Component {
     // LIFE-CYCLE CALLBACKS:
     private allPoolArr: cc.NodePool[] = [];
     private poolArr: Map<string, cc.NodePool[]> = new Map();
+
+    private poolMap: Map<string, cc.NodePool> = new Map();
     onLoad() {
-        PoolManager.instance = this;
+        // PoolManager.instance = this;
 
         for (let i = 0; i < this.prefabArr.length; i++) {
             if (this.prefabArr[i].prefab === null) {
@@ -39,6 +50,7 @@ export default class PoolManager extends cc.Component {
             }
         }
     }
+    // public 
     //创建节点池
     private creatPool(index: number): void {
         let initNum = this.prefabArr[index].num;

@@ -1,6 +1,6 @@
 
 import PlatformAPI from "../base/PlatformAPI";
-import ComFunc from "../base/ComFunc";
+import BaseFunc from "../base/BaseFunc";
 
 const { ccclass, property } = cc._decorator;
 
@@ -72,7 +72,7 @@ export default class AdManager extends cc.Component {
      */
     private initBannerAd(): void {
         if (this.bannerAd) {
-            ComFunc.log('销毁bannerAd')
+            BaseFunc.log('销毁bannerAd')
             this.bannerAd.destroy();
             this.bannerAd = null;
             this.banner_timestamp = 0;
@@ -111,7 +111,7 @@ export default class AdManager extends cc.Component {
             });
         }
         this.bannerAd.onError(() => {
-            ComFunc.log('加载BannerAd失败');
+            BaseFunc.log('加载BannerAd失败');
             this.bannerAd.destroy();
             this.bannerAd = null;
         })
@@ -142,7 +142,7 @@ export default class AdManager extends cc.Component {
             }
             //大于30秒，重新初始化Banner
             if (timestamp - this.banner_timestamp > 1000 * 30) {
-                ComFunc.log('重新生成banner');
+                BaseFunc.log('重新生成banner');
                 this.initBannerAd();
             } else {
                 if (!this.bannerAd) return;
@@ -176,7 +176,7 @@ export default class AdManager extends cc.Component {
                 }
             })
             interstitialAd.onClose(res => {
-                ComFunc.log('插屏 广告关闭', res);
+                BaseFunc.log('插屏 广告关闭', res);
                 if (interstitialAd.destroy) {//vivo小游戏插屏广告没有destroy方法
                     interstitialAd.destroy();
                 };
@@ -186,21 +186,21 @@ export default class AdManager extends cc.Component {
             // });
             // interstitialAd.load().then(() => {
             //     interstitialAd.show().then(() => {
-            //         ComFunc.log('插屏广告 显示成功');
+            //         BaseFunc.log('插屏广告 显示成功');
             //     }).catch(err => {
-            //         ComFunc.log("插屏广告 显示失败:", err);
+            //         BaseFunc.log("插屏广告 显示失败:", err);
             //         if (interstitialAd.destroy) {//vivo小游戏插屏广告没有destroy方法
             //             interstitialAd.destroy();
             //         };
             //     });
             // }).catch(err => {
-            //     ComFunc.log("插屏 广告加载失败:", err);
+            //     BaseFunc.log("插屏 广告加载失败:", err);
             //     if (interstitialAd.destroy) {//vivo小游戏插屏广告没有destroy方法
             //         interstitialAd.destroy();
             //     };
             // });
             // interstitialAd.onError(err => {
-            //     ComFunc.log("插屏 广告加载失败:", err);
+            //     BaseFunc.log("插屏 广告加载失败:", err);
             //     interstitialAd.destroy();
             // })
 
@@ -229,7 +229,7 @@ export default class AdManager extends cc.Component {
                     this.callBack();
                     this.callBack = null;
                 } else {
-                    ComFunc.tips("只有观看完整视频才能获得奖励~");
+                    BaseFunc.tips("只有观看完整视频才能获得奖励~");
                 }
                 if (this.platform_name === "vivo") {
                     // MusicManage.instance.setBgmStatus(false);//vivo小游戏进入视频不会关闭声音,需要关闭,之后再打开
@@ -256,10 +256,10 @@ export default class AdManager extends cc.Component {
                             // MusicManager.instance.setBgmStatus(true);//vivo小游戏进入视频不会关闭声音,需要关闭,之后再打开
                         }
                         this.callBack = callBack;
-                        ComFunc.log('激励视频 显示成功');
+                        BaseFunc.log('激励视频 显示成功');
                     }).catch(err => {
-                        ComFunc.log("激励视频 显示失败:", err);
-                        ComFunc.tips(`视频拉取失败，请稍后再试！`)
+                        BaseFunc.log("激励视频 显示失败:", err);
+                        BaseFunc.tips(`视频拉取失败，请稍后再试！`)
                         this.videoAd.destroy();
                         this.videoAd = null;
                     });
@@ -267,10 +267,10 @@ export default class AdManager extends cc.Component {
 
                     // this.videoAd.show();
                     // this.callBack = callBack;
-                    // ComFunc.log('激励视频 加载成功');
+                    // BaseFunc.log('激励视频 加载成功');
                 }).catch(err => {
-                    ComFunc.log("激励视频 加载失败:", err);
-                    ComFunc.tips(`视频拉取失败，请稍后再试！`)
+                    BaseFunc.log("激励视频 加载失败:", err);
+                    BaseFunc.tips(`视频拉取失败，请稍后再试！`)
                     this.videoAd.destroy();
                     this.videoAd = null;
                 });
@@ -286,17 +286,17 @@ export default class AdManager extends cc.Component {
             appBoxAd.load().then(() => {
                 appBoxAd.show()
                 appBoxAd.show().then(() => {
-                    ComFunc.log('盒子广告 显示成功');
+                    BaseFunc.log('盒子广告 显示成功');
                 }).catch(err => {
-                    ComFunc.log("盒子广告 显示失败:", err);
+                    BaseFunc.log("盒子广告 显示失败:", err);
                     appBoxAd.destroy();
                 });
             }).catch(err => {
-                ComFunc.log("盒子广告 加载失败:", err);
+                BaseFunc.log("盒子广告 加载失败:", err);
                 appBoxAd.destroy();
             });
             appBoxAd.onClose(() => {
-                ComFunc.log("盒子广告 关闭");
+                BaseFunc.log("盒子广告 关闭");
                 appBoxAd.destroy();
             });
         }

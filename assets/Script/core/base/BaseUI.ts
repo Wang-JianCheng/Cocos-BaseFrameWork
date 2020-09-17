@@ -1,5 +1,5 @@
 import EventManager from "../manager/EventManager";
-import ComFunc from "./ComFunc";
+import BaseFunc from "./BaseFunc";
 
 const { ccclass, property } = cc._decorator;
 
@@ -93,7 +93,7 @@ export default class BaseUI extends cc.Component {
             }
         });
     }
-    public init(): void {
+    public init(data: any, ...parmas): void {
 
     }
     onLoad() {
@@ -104,7 +104,7 @@ export default class BaseUI extends cc.Component {
     // 添加点击事件
     private addClickEvent(name: string, cmpt: cc.Component, data: string) {
         // console.error("addClickEvent", name, cmpt, data)
-        const funcName = 'onClick' + ComFunc.initialUpperCase(name)
+        const funcName = 'onClick' + BaseFunc.initialUpperCase(name)
         if (this[funcName] && typeof (this[funcName]) === 'function') {
             const events = this.getEvents(cmpt)
             if (events) {

@@ -1,10 +1,6 @@
 import AssetsManager from "./AssetsManager";
 
 const { ccclass, property } = cc._decorator;
-interface cachesModule {
-    url: string,
-    audio: cc.Asset
-}
 @ccclass
 export default class AudioManager extends cc.Component {
     // 当前实例 
@@ -16,57 +12,57 @@ export default class AudioManager extends cc.Component {
         }
         return this._instance;
     }
-    private caches: Map<string, cc.AudioClip> = new Map();//音效资源缓存
+    // private cache: Map<string, cc.AudioClip> = new Map();//音效资源缓存
     private curAudioId: number = -1;//当前背景音效 Id
     private curAudioName: string = "";//当前背景音效 名称
 
     private isBan: boolean = false;//当前游戏是否禁止播放音频
 
-    /**初始化加载通用音效资源 */
-    public async init() {
-        let assets = await AssetsManager.Instance.loadDir("common/audio", cc.AudioClip);
-        assets.forEach(element => this.caches.set("common/audio/" + element.name, element));
-    }
+    // /**初始化加载通用音效资源 */
+    // public async init() {
+    //     let assets = await AssetsManager.loadDir("common/audio", cc.AudioClip);
+    //     assets.forEach(element => this.cache.set("common/audio/" + element.name, element));
+    // }
     /**播放背景音乐等 */
-    public async playMusic(url: string) {
+    public async playMusic(name: string) {
         if (this.isBan) {
             return;
         }
-        if (!url) {
+        if (!name) {
             return;
         }
-        if (url === this.curAudioName) {//当前音效已经在播放
-            console.log(`${url}已经播放`);
+        if (name === this.curAudioName) {//当前音效已经在播放
+            console.log(`${name}已经播放`);
             return;
         }
         this.stopBGM();
-        let audio: cc.AudioClip = await this.getAudio(url);
+        let audio: cc.AudioClip = await AssetsManager.Instance.getAudio(name);
         this.curAudioId = cc.audioEngine.play(audio, true, 1);
-        this.curAudioName = url;
+        this.curAudioName = name;
     }
     /**播放短音效 */
-    public async playSound(url: string, loop: boolean = false, cb = null) {
+    public async playSound(name: string, loop: boolean = false, cb = null) {
         if (this.isBan) {
             return;
         }
-        if (!url) {
+        if (!name) {
             return;
         }
-        let audio: cc.AudioClip = await this.getAudio(url);
+        let audio: cc.AudioClip = await AssetsManager.Instance.getAudio(name);
         let audioId = cc.audioEngine.play(audio, loop, 1);
         if (cb && !loop) {//设置一个音频结束后的回调
             cc.audioEngine.setFinishCallback(audioId, cb);
         }
     }
-    private async getAudio(url: string): Promise<any> {
-        if (this.caches.has(url)) {
-            return Promise.resolve(this.caches.get(url));
-        } else {
-            let asset = await AssetsManager.Instance.load(url, cc.AudioClip);
-            this.caches.set(url, asset);
-            return Promise.resolve(asset);
-        }
-    }
+    // private async getAudio(url: string): Promise<any> {
+    //     if (this.cache.has(url)) {
+    //         return Promise.resolve(this.cache.get(url));
+    //     } else {
+    //         let asset = await AssetsManager.load(url, cc.AudioClip);
+    //         this.cache.set(url, asset);
+    //         return Promise.resolve(asset);
+    //     }
+    // }
     public stopBGM() {
         if (this.curAudioId >= 0) {
             cc.audioEngine.stop(this.curAudioId);
@@ -87,23 +83,23 @@ export default class AudioManager extends cc.Component {
         this.curAudioName = "";
         this.curAudioId = -1;
     }
-    /**释放音效资源 
-     * @param url 音效资源路径
-     */
-    public async releaseAudio(url: string) {
-        if (this.caches.has(url)) {
-            let audio: cc.AudioClip = this.caches.get(url);
-            this.caches.delete(url);
-            cc.assetManager.releaseAsset(audio);
-        }
-    }
+    // /**释放音效资源 
+    //  * @param url 音效资源路径
+    //  */
+    // public async releaseAudio(url: string) {
+    //     if (this.cache.has(url)) {
+    //         let audio: cc.AudioClip = this.cache.get(url);
+    //         this.cache.delete(url);
+    //         cc.assetManager.releaseAsset(audio);
+    //     }
+    // }
     /**改变当前音效状态 */
     public changeStatus(): void {
         this.isBan = !this.isBan;
         if (this.isBan) {
             this.stopAll();
         } else {
-            this.playMusic("common/audio/bgm");
+            this.playMusic("bgm");
         }
     }
 }
