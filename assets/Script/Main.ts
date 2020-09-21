@@ -1,4 +1,4 @@
-import { EventType } from "./common/config/EventType";
+import { EventType } from "./common/config/GlobalConfig";
 import BaseUI from "./core/base/BaseUI";
 import AssetsManager from "./core/manager/AssetsManager";
 import AudioManager from "./core/manager/AudioManager";
@@ -19,8 +19,8 @@ export default class App extends BaseUI {
     //事件监听
     public EventList(): any[] {
         return [
-            [EventType.UPDATE_DUCKLV, this.func1],
-            [EventType.UPDATE_GOLD, this.func2]
+            [EventType.UPDATE_SCORE, this.func1],
+            [EventType.UPDATE_COIN, this.func2]
         ]
     }
     start() {
@@ -31,7 +31,7 @@ export default class App extends BaseUI {
         // console.error("data", data.size, data.get("id"), data.get("ids"), data.has("id"), data.has("name"))
         // // data.delete("id")
         // // data.clear()
-        AssetsManager.Instance.loadImg("textures/coin2", this.icon)
+        AssetsManager.loadImg("textures/coin2", this.icon)
     }
     // ----------------------------------------- button listener function -------------------------------------------
     private onClickLogin(event: cc.Event.EventTouch, data: string): void {

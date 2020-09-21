@@ -1,21 +1,5 @@
-/**
- * 使用方法：将脚本挂在任意节点上(建议挂在canvas节点上)，输入你要生成节点池的个数，拉取对应的预制，输入初始化数量，节点池就完成了
- * 提示：把节点放回节点池的时候，不会自动把节点恢复到初始状态，所以，应该先自己对节点进行“恢复出厂”操作，然后放回节点池
- */
+import AssetsManager from "./AssetsManager";
 const { ccclass, property } = cc._decorator;
-@ccclass("Pool")
-export class Pool {
-    @property({
-        type: cc.Prefab,
-        tooltip: "用来生成节点池的预制体",
-    })
-    prefab: cc.Prefab = null;
-    @property({
-        type: cc.Integer,
-        tooltip: "初始化节点池的预制数量, 大于0的整数",
-    })
-    num: number = 1;
-}
 @ccclass
 export default class PoolManager extends cc.Component {
     // 当前实例 
@@ -27,53 +11,46 @@ export default class PoolManager extends cc.Component {
         }
         return this._instance;
     }
-
-
-    @property({
-        type: [Pool],
-        tooltip: "输入要生成的节点池的个数",
-    })
-    prefabArr: Pool[] = [];
-    // LIFE-CYCLE CALLBACKS:
-    private allPoolArr: cc.NodePool[] = [];
-    private poolArr: Map<string, cc.NodePool[]> = new Map();
-
     private poolMap: Map<string, cc.NodePool> = new Map();
-    onLoad() {
-        // PoolManager.instance = this;
 
-        for (let i = 0; i < this.prefabArr.length; i++) {
-            if (this.prefabArr[i].prefab === null) {
-                console.error("缺少预制体!!!");
-            } else {
-                this.creatPool(i);
-            }
-        }
+    public initPool() {
+
     }
-    // public 
-    //创建节点池
-    private creatPool(index: number): void {
-        let initNum = this.prefabArr[index].num;
+    /**创建对象池
+     * @param name  对象名称
+     * @param num   对象池数量
+     */
+    public async createPool(name: string, num: number) {
+        // let initNum = this.prefabArr[index].num;
         let nodePool = new cc.NodePool();
-        let prefab = this.prefabArr[index].prefab;
-        for (let i = 0; i < initNum; ++i) {
+        let prefab = await AssetsManager.Instance.getPrefab(name);
+        for (let i = 0; i < num; ++i) {
             let ins = cc.instantiate(prefab);
             nodePool.put(ins);
         }
-        this.allPoolArr.push(nodePool);//添加进节点池数组
-        // console.log("初始化节点池完成,节点池个数", this.allPoolArr,this.allPoolArr.length);
+        this.poolMap.set("name", nodePool);
+        // this.allPoolArr.push(nodePool);//添加进对象池数组
+        // console.log("初始化对象池完成,对象池个数", this.allPoolArr,this.allPoolArr.length);
+    }
+    /**销毁对象池
+     * @param key 对象名称 
+     */
+    public destroyPool(key: string): void {
+        let nodePool: cc.NodePool = this.poolMap.get(key);
+        nodePool.clear();//清除对象池
+        this.poolMap.delete(key);
     }
     start() {
 
     }
     /**
      * @index 该节点所用的预制资源在this.prefabArr数组中的下标,即属性面板中的次序(以0开始);
-     * @example PoolManager.instance.getNode(0);
+     * @example PoolManager.instance.getNode("demo");
      * */
-    public getNode(index: number): cc.Node {
+    public async getNode(key: string) {
         let node: cc.Node = null;
-        let nodePool: cc.NodePool = this.allPoolArr[index];
-        let prefab = this.prefabArr[index].prefab;
+        let nodePool: cc.NodePool = this.poolMap.get(key);
+        let prefab = await AssetsManager.Instance.getPrefab(key);
         if (nodePool.size() > 0) {
             node = nodePool.get();
         }
@@ -81,24 +58,18 @@ export default class PoolManager extends cc.Component {
             console.warn(prefab.name + "重新创建!!!");
             node = cc.instantiate(prefab);
         }
-        // console.warn(node.name + "节点池数量:", nodePool.size());
-        return node;
+        // console.warn(node.name + "对象池数量:", nodePool.size());
+        // return Promise.resolve(node) node;
+        return Promise.resolve(node);
     }
     /**
-     * @index 该节点所用的预制资源在this.prefabArr数组中的下标,即属性面板中的次序(以0开始);
+     * @key 节点名称;
      * @node 需要回收的节点
-     * @example PoolManager.instance.putNode(0,node);
+     * @example PoolManager.instance.putNode("demo",node);
      * */
-    public putNode(index: number, node: cc.Node): void {
-        let nodePool: cc.NodePool = this.allPoolArr[index];
+    public putNode(key: string, node: cc.Node): void {
+        let nodePool: cc.NodePool = this.poolMap.get(key);
         nodePool.put(node);
-        // console.log(node.name + "节点池数量:", nodePool.size());
+        // console.log(node.name + "对象池数量:", nodePool.size());
     }
-    //此脚本摧毁的时候回自动销毁所有节点池
-    onDestroy() {
-        for (let i = 0; i < this.allPoolArr.length; i++) {
-            this.allPoolArr[i].clear();
-        }
-    }
-    // update (dt) {}
 }

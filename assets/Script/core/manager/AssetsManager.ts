@@ -36,12 +36,12 @@ export default class AssetsManager extends cc.Component {
         await this.initPrefab();
         // await AudioManager.Instance.init();
     }
-    public async initJson() {
+    public async initAudio() {
         let assets = await AssetsManager.loadDir("common/audio", cc.AudioClip);
         assets.forEach(element => this.audioCache.set(element.name, element));
     }
-    public async initAudio() {
-        let assets = await AssetsManager.loadDir("common/audio", cc.JsonAsset);
+    public async initJson() {
+        let assets = await AssetsManager.loadDir("common/json", cc.JsonAsset);
         assets.forEach(element => {
             this.jsonCache.set(element.name, {
                 data: element.json,
@@ -53,14 +53,24 @@ export default class AssetsManager extends cc.Component {
         })
     }
     public async initImage() {
-        let assets = await AssetsManager.loadDir("common/prefab", cc.AudioClip);
-        assets.forEach(element => this.prefabCache.set(element.name, element));
+        let assets = await AssetsManager.loadDir("common/image", cc.SpriteFrame);
+        assets.forEach(element => this.imageCache.set(element.name, element));
     }
     public async initPrefab() {
-        let assets = await AssetsManager.loadDir("common/prefab", cc.AudioClip);
+        let assets = await AssetsManager.loadDir("common/prefab", cc.Prefab);
         assets.forEach(element => this.prefabCache.set(element.name, element));
     }
 
+
+    public async getPrefab(key: string): Promise<any> {
+        if (this.prefabCache.has(key)) {
+            return Promise.resolve(this.prefabCache.get(key));
+        } else {
+            let asset = await AssetsManager.load("prefab/" + key, cc.Prefab);
+            this.prefabCache.set(key, asset);
+            return Promise.resolve(asset);
+        }
+    }
     public async getAudio(key: string): Promise<any> {
         if (this.audioCache.has(key)) {
             return Promise.resolve(this.audioCache.get(key));
@@ -80,6 +90,16 @@ export default class AssetsManager extends cc.Component {
             cc.assetManager.releaseAsset(audio);
         }
     }
+    /**释放预制资源 
+    * @param key 资源名称
+    */
+    public async releasePrefab(key: string) {
+        if (this.prefabCache.has(key)) {
+            let prefab: cc.Prefab = this.prefabCache.get(key);
+            this.prefabCache.delete(key);
+            cc.assetManager.releaseAsset(prefab);
+        }
+    }
     /**获取配置数据
      * @param key 名称
      */
@@ -95,6 +115,8 @@ export default class AssetsManager extends cc.Component {
         return jsonData && jsonData.getById(id);
     }
 
+
+    
     /**
      * 加载目标文件夹中的所有资源
      * @param url resources下文件夹路径
